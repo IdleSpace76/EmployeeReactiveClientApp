@@ -1,6 +1,8 @@
 package home.employeeapp;
 
 import home.employeeapp.dto.Employee;
+import home.employeeapp.exception.ClientDataException;
+import home.employeeapp.exception.EmployeeServiceException;
 import home.employeeapp.service.EmployeeRestClient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -41,6 +43,14 @@ public class EmployeeRestClientTest {
         int employeeId = 10;
         Assertions.assertThrows(WebClientResponseException.class,
                 () -> employeeRestClient.retrieveEmployeeById(employeeId));
+    }
+
+    @Test
+    void retrieveEmployeeById_custom_error_handling() {
+
+        int employeeId = 10;
+        Assertions.assertThrows(ClientDataException.class,
+                () -> employeeRestClient.retrieveEmployeeById_custom_error_handling(employeeId));
     }
 
     @Test
@@ -113,6 +123,18 @@ public class EmployeeRestClientTest {
         String response = employeeRestClient.deleteEmployeeById(employee.getId());
         String exceptedMessage = "Employee deleted successfully.";
         assertEquals(response, exceptedMessage);
+    }
+
+    @Test
+    void errorEndpoint() {
+        Assertions.assertThrows(EmployeeServiceException.class,
+                () -> employeeRestClient.errorEndpoint());
+    }
+
+    @Test
+    void errorEndpoint_NotFound() {
+        Assertions.assertThrows(WebClientResponseException.class,
+                () -> employeeRestClient.deleteEmployeeById(200));
     }
 }
 
