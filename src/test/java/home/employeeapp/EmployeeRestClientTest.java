@@ -46,6 +46,14 @@ public class EmployeeRestClientTest {
     }
 
     @Test
+    void retrieveEmployeeById_with_retry() {
+
+        int employeeId = 10;
+        Assertions.assertThrows(reactor.retry.RetryExhaustedException.class,
+                () -> employeeRestClient.retrieveEmployeeById_with_retry(employeeId));
+    }
+
+    @Test
     void retrieveEmployeeById_custom_error_handling() {
 
         int employeeId = 10;
